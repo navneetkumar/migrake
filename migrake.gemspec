@@ -8,8 +8,8 @@ Gem::Specification.new do |s|
   s.authors     = ["Navneet"]
   s.email       = ["navneetk@thoughtworks.com"]
   s.homepage    = ""
-  s.summary     = %q{TODO: Write a gem summary}
-  s.description = %q{TODO: Write a gem description}
+  s.summary     = %q{Run all versioned custom rake tasks using this gem }
+  s.description = %q{It automates the process of invoking rake tasks and maintains the status of cutom rake tasks}
 
   s.rubyforge_project = "migrake"
 
