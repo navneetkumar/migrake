@@ -1,7 +1,7 @@
 namespace :migrake do
 
   desc "Run all pending automated rake"
-  task :run => :environment do
+  task :run => :install do
     get_all.each do |task|
       remove_prereq task
       unless RakeTask.exists? :task_name => task.name
@@ -13,21 +13,15 @@ namespace :migrake do
   end
 
   desc "List pending automated rake"
-  task :pending => :environment do
+  task :pending => :install do
     existing_tasks = RakeTask.all.map(&:task_name)
     get_all.each do |task|
       puts task.name unless existing_tasks.include? task.name
     end
   end
   
-  desc "Generate a automated rake task"
-  task :generate,:task_name do |t,args|
-      return if args.empty?
-     puts "#{args.task_name}"
-  end
-
   desc "List All the automated rake"
-  task :list => :environment do
+  task :list => :install do
     puts "\n\n"
     get_all.each do  |task|
       taskobj = RakeTask.find_by_task_name task.name
@@ -37,13 +31,18 @@ namespace :migrake do
     end
   end
 
+  private
   desc "Prepares gem for usage"
   task :install => :environment do
-    system("rails g migrakeschema")
-    Rake::Task['db:migrate'].invoke
+    if !installed?
+      system("rails g migrakeschema")
+      Rake::Task['db:migrate'].invoke
+    else
+      puts"Migrake is already installed"
+    end
   end
 
-  private
+
   
   KEY = 'migrake'
 
@@ -51,7 +50,6 @@ namespace :migrake do
     tasks = Rake.application.tasks.select { |t| auto_prerequisite(t).present? }
     task_map = tasks.group_by{ |task| auto_prerequisite(task) != KEY }
     task_map[true].sort_by{ |task| auto_prerequisite(task) } + task_map[false]
-
   end
 
   def remove_prereq task
@@ -63,6 +61,15 @@ namespace :migrake do
     task.prerequisites.select { |x| x =~/^#{KEY}(_\d+)?$/ }.try(:first)
   end
 
+  def installed?
+    begin
+       RakeTask.first
+    rescue
+      return false
+    end
+    true
+  end
+   
 end
 
 class RakeTask < ActiveRecord::Base
