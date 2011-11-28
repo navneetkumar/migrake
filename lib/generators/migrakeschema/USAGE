@@ -1,0 +1,8 @@
+Description:
+    Generates an automated rake task
+
+Example:
+    rails generate auto taskname
+
+    This will create:
+        lib/custom/13123124_taskname.rake
