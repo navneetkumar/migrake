@@ -1,0 +1,20 @@
+Installation
+============
+1. Add Gem in Gemfile
+    gem "migrake", :git => 'git://github.com/navneetkumar/migrake.git'
+2.Run bundle to install
+    bundle install
+3.Run rake task to setup migrake table
+    rake migrake:install
+
+Usage
+============
+
+1.Generate custom rake
+    rails g migrake <taskname>
+2.List all task maintained by migrake
+    rake migrake:list
+3.List all pending task
+    rake migrake:pending
+4.Run all pending task
+    rake migrake:run
