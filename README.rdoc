@@ -1,5 +1,9 @@
-Installation
-============
+=Migrake
+
+This gem is useful for automating all custom rake tasks during deploy time.It maintains the status of those rake task and it wont rerun if its already run.
+
+==Installation
+
 1. Add Gem in Gemfile
     gem "migrake", :git => 'git://github.com/navneetkumar/migrake.git'
 2.Run bundle to install
@@ -7,8 +11,7 @@ Installation
 3.Run rake task to setup migrake table
     rake migrake:install
 
-Usage
-============
+==Usage
 
 1.Generate custom rake
     rails g migrake <taskname>
