@@ -9,6 +9,7 @@ namespace :migrake do
         RakeTask.add_task task
       end
     end
+    puts "All pending task ran successfully."
   end
 
   desc "List pending automated rake"
@@ -43,19 +44,23 @@ namespace :migrake do
   end
 
   private
+  
+  KEY = 'migrake'
 
   def get_all
     tasks = Rake.application.tasks.select { |t| auto_prerequisite(t).present? }
-    tasks.sort_by { |t| auto_prerequisite(t) }
+    task_map = tasks.group_by{ |task| auto_prerequisite(task) != KEY }
+    task_map[true].sort_by{ |task| auto_prerequisite(task) } + task_map[false]
+
   end
 
   def remove_prereq task
-    task.prerequisites.delete_if {|t| t =~ /migrake/}
+    task.prerequisites.delete_if {|t| t =~ /#{KEY}/}
     task
   end
 
   def auto_prerequisite task
-    task.prerequisites.select { |x| x =~/^migrake(_\d+)?$/ }.try(:first)
+    task.prerequisites.select { |x| x =~/^#{KEY}(_\d+)?$/ }.try(:first)
   end
 
 end

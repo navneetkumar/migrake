@@ -4,7 +4,7 @@ This gem is useful for automating all custom rake tasks during deploy time.It ma
 
 ==Installation
 
-1. Add Gem in Gemfile
+1.Add Gem in Gemfile
     gem "migrake", :git => 'git://github.com/navneetkumar/migrake.git'
 2.Run bundle to install
     bundle install
