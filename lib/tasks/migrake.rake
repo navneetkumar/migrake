@@ -49,7 +49,8 @@ namespace :migrake do
   def get_all
     tasks = Rake.application.tasks.select { |t| auto_prerequisite(t).present? }
     task_map = tasks.group_by{ |task| auto_prerequisite(task) != KEY }
-    task_map[true].sort_by{ |task| auto_prerequisite(task) } + task_map[false]
+    timestamped_tasks = task_map[true] ? task_map[true].sort_by{ |task| auto_prerequisite(task) } : []
+    timestamped_tasks + (task_map[false] ? task_map[false] : [])
   end
 
   def remove_prereq task
