@@ -19,7 +19,18 @@ namespace :migrake do
       puts task.name unless existing_tasks.include? task.name
     end
   end
-  
+
+  desc "Raise an error if there are pending tasks"
+  task :abort_if_pending_tasks => :install do
+    existing_tasks = RakeTask.all.map(&:task_name)
+    pending_tasks = get_all.map(&:name) - existing_tasks
+    if pending_tasks.any?
+      puts "Pending tasks:"
+      pending_tasks.each { |task| puts task }
+      abort %{Run "rake migrake:run" to execute pending migrake tasks.}
+    end
+  end
+
   desc "List All the automated rake"
   task :list => :install do
     puts "\n\n"
@@ -42,8 +53,6 @@ namespace :migrake do
     end
   end
 
-
-  
   KEY = 'migrake'
 
   def get_all
@@ -70,7 +79,7 @@ namespace :migrake do
     end
     true
   end
-   
+
 end
 
 class RakeTask < ActiveRecord::Base
